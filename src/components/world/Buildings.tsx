@@ -370,6 +370,9 @@ export const CityExitBuilding: React.FC = () => {
 
 // 9. Arcade Building (Playground entrance)
 export const ArcadeBuilding: React.FC = () => {
+  const { activeLocationId, activeGameId } = useStore();
+  const isModalOpen = !!(activeLocationId || activeGameId);
+
   return (
     <group>
       {/* Base Platform */}
@@ -413,17 +416,22 @@ export const ArcadeBuilding: React.FC = () => {
       </mesh>
 
       {/* Floating Sign Text */}
-      <Html position={[0, 2.5, 0.45]} center distanceFactor={10} style={{ pointerEvents: 'none' }}>
-        <div className="bg-slate-900 border border-brand-blue/30 text-white font-extrabold text-[8px] tracking-widest px-2.5 py-1 rounded-md shadow-premium uppercase whitespace-nowrap animate-soft-pulse">
-          🕹️ PLAYGROUND
-        </div>
-      </Html>
+      {!isModalOpen && (
+        <Html position={[0, 2.5, 0.45]} center distanceFactor={10} style={{ pointerEvents: 'none' }}>
+          <div className="bg-slate-900 border border-brand-blue/30 text-white font-extrabold text-[8px] tracking-widest px-2.5 py-1 rounded-md shadow-premium uppercase whitespace-nowrap animate-soft-pulse">
+            🕹️ PLAYGROUND
+          </div>
+        </Html>
+      )}
     </group>
   );
 };
 
 // 10. Developer Museum Building
 export const MuseumBuilding: React.FC = () => {
+  const { activeLocationId, activeGameId } = useStore();
+  const isModalOpen = !!(activeLocationId || activeGameId);
+
   return (
     <group>
       {/* Museum Base Platform */}
@@ -453,17 +461,22 @@ export const MuseumBuilding: React.FC = () => {
       </mesh>
 
       {/* Sign */}
-      <Html position={[0, 2.3, 0.65]} center distanceFactor={10} style={{ pointerEvents: 'none' }}>
-        <div className="bg-purple-900 border border-purple-500/30 text-white font-bold text-[8px] tracking-wider px-2 py-0.5 rounded shadow-soft whitespace-nowrap">
-          🏛️ MUSEUM
-        </div>
-      </Html>
+      {!isModalOpen && (
+        <Html position={[0, 2.3, 0.65]} center distanceFactor={10} style={{ pointerEvents: 'none' }}>
+          <div className="bg-purple-900 border border-purple-500/30 text-white font-bold text-[8px] tracking-wider px-2 py-0.5 rounded shadow-soft whitespace-nowrap">
+            🏛️ MUSEUM
+          </div>
+        </Html>
+      )}
     </group>
   );
 };
 
 // 11. Developer Café
 export const CafeBuilding: React.FC = () => {
+  const { activeLocationId, activeGameId } = useStore();
+  const isModalOpen = !!(activeLocationId || activeGameId);
+
   return (
     <group>
       {/* Café Base */}
@@ -501,17 +514,22 @@ export const CafeBuilding: React.FC = () => {
       </mesh>
 
       {/* Floating Badge */}
-      <Html position={[0, 2.1, 0]} center distanceFactor={10} style={{ pointerEvents: 'none' }}>
-        <div className="bg-emerald-900 border border-emerald-500/30 text-white font-bold text-[8px] tracking-wider px-2 py-0.5 rounded shadow-soft whitespace-nowrap">
-          ☕ CAFÉ
-        </div>
-      </Html>
+      {!isModalOpen && (
+        <Html position={[0, 2.1, 0]} center distanceFactor={10} style={{ pointerEvents: 'none' }}>
+          <div className="bg-emerald-900 border border-emerald-500/30 text-white font-bold text-[8px] tracking-wider px-2 py-0.5 rounded shadow-soft whitespace-nowrap">
+            ☕ CAFÉ
+          </div>
+        </Html>
+      )}
     </group>
   );
 };
 
 // 12. Terminal Kiosk
 export const TerminalKiosk: React.FC = () => {
+  const { activeLocationId, activeGameId } = useStore();
+  const isModalOpen = !!(activeLocationId || activeGameId);
+
   return (
     <group>
       {/* Base Platform */}
@@ -545,11 +563,13 @@ export const TerminalKiosk: React.FC = () => {
       </mesh>
 
       {/* Floating Kiosk Badge */}
-      <Html position={[0, 1.9, 0]} center distanceFactor={10} style={{ pointerEvents: 'none' }}>
-        <div className="bg-slate-900 border border-slate-500/30 text-white font-bold text-[8px] tracking-wider px-2 py-0.5 rounded shadow-soft whitespace-nowrap">
-          💻 TERMINAL
-        </div>
-      </Html>
+      {!isModalOpen && (
+        <Html position={[0, 1.9, 0]} center distanceFactor={10} style={{ pointerEvents: 'none' }}>
+          <div className="bg-slate-900 border border-slate-500/30 text-white font-bold text-[8px] tracking-wider px-2 py-0.5 rounded shadow-soft whitespace-nowrap">
+            💻 TERMINAL
+          </div>
+        </Html>
+      )}
     </group>
   );
 };
