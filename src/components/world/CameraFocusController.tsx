@@ -21,6 +21,8 @@ export const CameraFocusController: React.FC = () => {
   const initialTime = useRef(0);
 
   useEffect(() => {
+    const isMobile = window.innerWidth < 768;
+
     if (activeLocationId !== lastActiveId.current) {
       lastActiveId.current = activeLocationId;
       transitionProgress.current = 0; // Trigger transition animation
@@ -32,29 +34,54 @@ export const CameraFocusController: React.FC = () => {
           targetPos.current.set(x, y + 1.2, z);
           
           if (loc.id === 'city-center') {
-            cameraPos.current.set(x + 3.5, y + 4.0, z + 6.0);
+            cameraPos.current.set(
+              x + (isMobile ? 5.2 : 3.5), 
+              y + (isMobile ? 5.5 : 4.0), 
+              z + (isMobile ? 8.5 : 6.0)
+            );
           } else if (loc.id === 'ai-lab') {
-            cameraPos.current.set(x - 4.5, y + 3.0, z + 4.5);
+            cameraPos.current.set(
+              x - (isMobile ? 6.2 : 4.5), 
+              y + (isMobile ? 4.2 : 3.0), 
+              z + (isMobile ? 6.2 : 4.5)
+            );
           } else if (loc.id === 'developer-hq') {
-            cameraPos.current.set(x - 4.5, y + 3.0, z - 4.5);
+            cameraPos.current.set(
+              x - (isMobile ? 6.2 : 4.5), 
+              y + (isMobile ? 4.2 : 3.0), 
+              z - (isMobile ? 6.2 : 4.5)
+            );
           } else if (loc.id === 'cpi-campus') {
-            cameraPos.current.set(x + 5.0, y + 2.5, z - 4.5);
+            cameraPos.current.set(
+              x + (isMobile ? 7.2 : 5.0), 
+              y + (isMobile ? 3.8 : 2.5), 
+              z - (isMobile ? 6.2 : 4.5)
+            );
           } else if (loc.id === 'github-center') {
-            cameraPos.current.set(x + 4.5, y + 2.5, z + 4.5);
+            cameraPos.current.set(
+              x + (isMobile ? 6.2 : 4.5), 
+              y + (isMobile ? 3.5 : 2.5), 
+              z + (isMobile ? 6.2 : 4.5)
+            );
           } else {
-            cameraPos.current.set(x + 4.5, y + 2.8, z + 4.5);
+            cameraPos.current.set(
+              x + (isMobile ? 6.2 : 4.5), 
+              y + (isMobile ? 3.8 : 2.8), 
+              z + (isMobile ? 6.2 : 4.5)
+            );
           }
         }
       } else {
-        // Return to wide overview
+        // Return to wide overview - zoom out further on mobile screen sizes
         targetPos.current.set(0, 0, 0);
-        cameraPos.current.set(0, 16, 22);
+        cameraPos.current.set(0, isMobile ? 26 : 15, isMobile ? 33 : 20);
       }
     }
   }, [activeLocationId]);
 
   useFrame((state, delta) => {
     const t = state.clock.getElapsedTime();
+    const isMobile = window.innerWidth < 768;
 
     // 1. Initial Load Cinematic Intro (Pan from high altitude towards City Center)
     if (isInitialLoad.current) {
@@ -62,7 +89,9 @@ export const CameraFocusController: React.FC = () => {
       const elapsed = t - initialTime.current;
       
       if (elapsed < 2.5) {
-        camera.position.lerp(new THREE.Vector3(0, 12, 18), 0.05 * delta * 60);
+        // Adjust intro end altitude for mobile so it fits the viewport from start
+        const targetIntroPos = new THREE.Vector3(0, isMobile ? 22 : 12, isMobile ? 28 : 18);
+        camera.position.lerp(targetIntroPos, 0.05 * delta * 60);
         camera.lookAt(0, 1, 0);
         if (controls) {
           (controls as any).target.set(0, 1, 0);
