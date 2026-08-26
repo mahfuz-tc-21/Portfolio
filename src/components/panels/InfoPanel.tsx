@@ -14,6 +14,10 @@ export const InfoPanel: React.FC = () => {
 
   if (!activeLocationId) return null;
 
+  // Prevent generic InfoPanel from rendering for custom interactive locations
+  const customInteractiveLocationIds = ['playground', 'museum', 'cafe', 'terminal'];
+  if (customInteractiveLocationIds.includes(activeLocationId)) return null;
+
   const location = locationsData.find((l) => l.id === activeLocationId);
   if (!location) return null;
 

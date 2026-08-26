@@ -245,7 +245,7 @@ export const HudOverlay: React.FC = () => {
                   : 'text-slate-600 hover:bg-slate-50'
               }`}
             >
-              {loc.district}
+              {loc.shortLabel}
             </button>
           );
         })}

@@ -23,6 +23,7 @@ export interface Location {
   color: string;
   coordinates: [number, number, number]; // [x, y, z] in the 3D space
   interactive: boolean;
+  shortLabel: string;
 }
 
 export const locationsData: Location[] = [
@@ -35,7 +36,8 @@ export const locationsData: Location[] = [
     icon: 'Building2',
     color: '#0066FF',
     coordinates: [0, 0, 0],
-    interactive: true
+    interactive: true,
+    shortLabel: 'HQ'
   },
   {
     id: 'ai-lab',
@@ -46,7 +48,8 @@ export const locationsData: Location[] = [
     icon: 'Brain',
     color: '#8B5CF6',
     coordinates: [8, 0, -8],
-    interactive: true
+    interactive: true,
+    shortLabel: 'AI Lab'
   },
   {
     id: 'project-avenue',
@@ -57,7 +60,8 @@ export const locationsData: Location[] = [
     icon: 'FolderGit2',
     color: '#06B6D4',
     coordinates: [-10, 0, -6],
-    interactive: true
+    interactive: true,
+    shortLabel: 'Projects'
   },
   {
     id: 'developer-hq',
@@ -68,7 +72,8 @@ export const locationsData: Location[] = [
     icon: 'Laptop',
     color: '#10B981',
     coordinates: [6, 0, 8],
-    interactive: true
+    interactive: true,
+    shortLabel: 'Dev HQ'
   },
   {
     id: 'cpi-campus',
@@ -79,7 +84,8 @@ export const locationsData: Location[] = [
     icon: 'GraduationCap',
     color: '#F59E0B',
     coordinates: [-8, 0, 8],
-    interactive: true
+    interactive: true,
+    shortLabel: 'Campus'
   },
   {
     id: 'tech-cluder',
@@ -90,7 +96,8 @@ export const locationsData: Location[] = [
     icon: 'Users',
     color: '#EF4444',
     coordinates: [12, 0, 0],
-    interactive: true
+    interactive: true,
+    shortLabel: 'Tech Cluder'
   },
   {
     id: 'github-center',
@@ -101,7 +108,8 @@ export const locationsData: Location[] = [
     icon: 'Github',
     color: '#333333',
     coordinates: [-12, 0, 2],
-    interactive: true
+    interactive: true,
+    shortLabel: 'GitHub'
   },
   {
     id: 'city-exit',
@@ -112,7 +120,8 @@ export const locationsData: Location[] = [
     icon: 'Send',
     color: '#EC4899',
     coordinates: [0, 0, 14],
-    interactive: true
+    interactive: true,
+    shortLabel: 'Contact'
   },
   {
     id: 'playground',
@@ -123,7 +132,8 @@ export const locationsData: Location[] = [
     icon: 'Trophy',
     color: '#3B82F6',
     coordinates: [12, 0, 10],
-    interactive: true
+    interactive: true,
+    shortLabel: 'Playground'
   },
   {
     id: 'museum',
@@ -134,7 +144,8 @@ export const locationsData: Location[] = [
     icon: 'Compass',
     color: '#8B5CF6',
     coordinates: [-12, 0, -10],
-    interactive: true
+    interactive: true,
+    shortLabel: 'Museum'
   },
   {
     id: 'cafe',
@@ -145,7 +156,8 @@ export const locationsData: Location[] = [
     icon: 'Coffee',
     color: '#10B981',
     coordinates: [8, 0, 12],
-    interactive: true
+    interactive: true,
+    shortLabel: 'Café'
   },
   {
     id: 'terminal',
@@ -156,7 +168,8 @@ export const locationsData: Location[] = [
     icon: 'Terminal',
     color: '#0F172A',
     coordinates: [-6, 0, 12],
-    interactive: true
+    interactive: true,
+    shortLabel: 'Terminal'
   }
 ];
 

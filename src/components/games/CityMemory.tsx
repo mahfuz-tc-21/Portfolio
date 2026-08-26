@@ -27,14 +27,14 @@ export const CityMemory: React.FC = () => {
 
   const timeoutIds = useRef<number[]>([]);
 
-  if (activeGameId !== 'city-memory') return null;
-
-  // Clear active timeouts when unmounting
+  // Cleanup active timeouts when unmounting — MUST be before any conditional return
   useEffect(() => {
     return () => {
       timeoutIds.current.forEach(id => clearTimeout(id));
     };
   }, []);
+
+  if (activeGameId !== 'city-memory') return null;
 
   const handleStartGame = () => {
     setCurrentRound(1);
@@ -113,7 +113,7 @@ export const CityMemory: React.FC = () => {
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/50 backdrop-blur-sm pointer-events-auto select-none">
+    <div className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-slate-900/50 backdrop-blur-sm pointer-events-auto select-none">
       <div className="bg-white/95 backdrop-blur-md rounded-2xl border border-slate-100 shadow-premium w-full max-w-md max-h-[85vh] overflow-y-auto animate-in zoom-in-95 duration-200 flex flex-col">
         {/* Header */}
         <div className="flex items-center justify-between p-5 border-b border-slate-100 bg-slate-50/50">

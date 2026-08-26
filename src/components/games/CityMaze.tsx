@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { useStore } from '../../store/useStore';
 import { ArrowLeft, RefreshCw, Trophy, Play, CheckCircle2, ChevronUp, ChevronDown, ChevronLeft, ChevronRight } from 'lucide-react';
 import confetti from 'canvas-confetti';
@@ -27,6 +27,10 @@ export const CityMaze: React.FC = () => {
   const [timer, setTimer] = useState(0);
 
   const timerInterval = useRef<number | null>(null);
+  // Use a ref so keyboard handler always sees latest pos without re-binding
+  const playerPosRef = useRef<{ x: number; y: number }>({ x: startX, y: startY });
+  const gameStateRef = useRef<'idle' | 'playing' | 'completed'>('idle');
+  const timerRef = useRef(0);
 
   if (activeGameId !== 'city-maze') return null;
 
@@ -38,71 +42,67 @@ export const CityMaze: React.FC = () => {
   }, []);
 
   const handleStartGame = () => {
-    setPlayerPos({ x: startX, y: startY });
+    const startPos = { x: startX, y: startY };
+    playerPosRef.current = startPos;
+    timerRef.current = 0;
+    gameStateRef.current = 'playing';
+    setPlayerPos(startPos);
     setTimer(0);
     setGameState('playing');
     
     if (timerInterval.current) clearInterval(timerInterval.current);
     timerInterval.current = window.setInterval(() => {
-      setTimer((prev) => prev + 1);
+      timerRef.current++;
+      setTimer(timerRef.current);
     }, 1000);
   };
 
-  const movePlayer = (dx: number, dy: number) => {
-    if (gameState !== 'playing') return;
+  const movePlayer = useCallback((dx: number, dy: number) => {
+    if (gameStateRef.current !== 'playing') return;
 
-    const newX = playerPos.x + dx;
-    const newY = playerPos.y + dy;
+    const cur = playerPosRef.current;
+    const newX = cur.x + dx;
+    const newY = cur.y + dy;
 
-    // Check bounds & wall
     if (
       newY >= 0 && newY < mazeLayout.length &&
       newX >= 0 && newX < mazeLayout[0].length &&
       mazeLayout[newY][newX] !== 1
     ) {
-      setPlayerPos({ x: newX, y: newY });
+      const newPos = { x: newX, y: newY };
+      playerPosRef.current = newPos;
+      setPlayerPos(newPos);
 
-      // Check win condition (Goal value is 3)
       if (mazeLayout[newY][newX] === 3) {
+        gameStateRef.current = 'completed';
         setGameState('completed');
         if (timerInterval.current) clearInterval(timerInterval.current);
-        
-        saveGameScore('cityMaze', timer);
-        
-        confetti({
-          particleCount: 50,
-          spread: 45,
-          origin: { y: 0.6 }
-        });
+        saveGameScore('cityMaze', timerRef.current);
+        confetti({ particleCount: 50, spread: 45, origin: { y: 0.6 } });
       }
     }
-  };
+  }, [saveGameScore]);
 
-  // Bind keyboard inputs
+  // Bind keyboard inputs — stable handler via refs
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (gameState !== 'playing') return;
       if (['ArrowUp', 'w', 'W'].includes(e.key)) {
-        e.preventDefault();
-        movePlayer(0, -1);
+        e.preventDefault(); movePlayer(0, -1);
       } else if (['ArrowDown', 's', 'S'].includes(e.key)) {
-        e.preventDefault();
-        movePlayer(0, 1);
+        e.preventDefault(); movePlayer(0, 1);
       } else if (['ArrowLeft', 'a', 'A'].includes(e.key)) {
-        e.preventDefault();
-        movePlayer(-1, 0);
+        e.preventDefault(); movePlayer(-1, 0);
       } else if (['ArrowRight', 'd', 'D'].includes(e.key)) {
-        e.preventDefault();
-        movePlayer(1, 0);
+        e.preventDefault(); movePlayer(1, 0);
       }
     };
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [gameState, playerPos]);
+  }, [movePlayer]);
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/50 backdrop-blur-sm pointer-events-auto select-none">
+    <div className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-slate-900/50 backdrop-blur-sm pointer-events-auto select-none">
       <div className="bg-white/95 backdrop-blur-md rounded-2xl border border-slate-100 shadow-premium w-full max-w-md max-h-[90vh] overflow-y-auto animate-in zoom-in-95 duration-200 flex flex-col">
         {/* Header */}
         <div className="flex items-center justify-between p-5 border-b border-slate-100 bg-slate-50/50">

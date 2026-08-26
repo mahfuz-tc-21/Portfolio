@@ -41,6 +41,7 @@ import { AILabChallenge } from './components/games/AILabChallenge';
 import { CityMemory } from './components/games/CityMemory';
 import { CityMaze } from './components/games/CityMaze';
 import { CodeRunner } from './components/games/CodeRunner';
+import { TypeAttack } from './components/games/TypeAttack';
 
 // New District Panels
 import { MuseumViewer } from './components/panels/MuseumViewer';
@@ -358,6 +359,7 @@ export const App: React.FC = () => {
           <CityMemory />
           <CityMaze />
           <CodeRunner />
+          <TypeAttack />
 
           {/* Interactive Panels */}
           <MuseumViewer />
