@@ -24,7 +24,8 @@ export const InteractiveBuilding: React.FC<InteractiveBuildingProps> = ({
     activeLocationId, 
     hoveredLocationId, 
     setActiveLocationId, 
-    setHoveredLocationId 
+    setHoveredLocationId,
+    activeGameId
   } = useStore();
 
   const [hovered, setHovered] = useState(false);
@@ -67,8 +68,8 @@ export const InteractiveBuilding: React.FC<InteractiveBuildingProps> = ({
         {children}
       </group>
 
-      {/* Floating 3D/HTML Location Label - only show when in free-exploration mode */}
-      {!activeLocationId && (
+      {/* Floating 3D/HTML Location Label - hide when any modal or game is open */}
+      {!activeLocationId && !activeGameId && (
         <Html
           position={[0, labelOffset, 0]}
           center

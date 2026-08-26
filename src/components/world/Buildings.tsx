@@ -3,6 +3,7 @@ import * as THREE from 'three';
 import { useFrame } from '@react-three/fiber';
 import { Html } from '@react-three/drei';
 import { currentStatus } from '../../data/portfolioData';
+import { useStore } from '../../store/useStore';
 
 // 1. City Center Tower (Mahfuz Uddin HQ)
 export const CityCenterBuilding: React.FC = () => {
@@ -555,6 +556,10 @@ export const TerminalKiosk: React.FC = () => {
 
 // 13. "MAHFUZ NOW" Roundabout Billboard
 export const BillboardModel: React.FC = () => {
+  const { activeLocationId, activeGameId } = useStore();
+  // Hide HTML overlay when any panel or game modal is open
+  const isModalOpen = !!(activeLocationId || activeGameId);
+
   return (
     <group>
       {/* Metal Pillar */}
@@ -575,30 +580,32 @@ export const BillboardModel: React.FC = () => {
         <meshStandardMaterial color="#F8FAFC" roughness={0.9} />
       </mesh>
 
-      {/* HTML screen card rendering dynamic data */}
-      <Html 
-        position={[0, 3.2, 0.23]} 
-        center 
-        distanceFactor={9}
-        transform
-        sprite
-      >
-        <div className="bg-slate-900 text-white border border-slate-800 p-2.5 rounded-lg w-[160px] select-none font-sans shadow-premium flex flex-col justify-between h-[90px]">
-          <div>
-            <div className="flex items-center justify-between text-[7px] font-black uppercase text-brand-blue tracking-wider border-b border-slate-800 pb-1">
-              <span>Mahfuz Now</span>
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 block animate-pulse" />
+      {/* HTML screen card — only render when no modal is open */}
+      {!isModalOpen && (
+        <Html 
+          position={[0, 3.2, 0.23]} 
+          center 
+          distanceFactor={9}
+          transform
+          sprite
+        >
+          <div className="bg-slate-900 text-white border border-slate-800 p-2.5 rounded-lg w-[160px] select-none font-sans shadow-premium flex flex-col justify-between h-[90px]">
+            <div>
+              <div className="flex items-center justify-between text-[7px] font-black uppercase text-brand-blue tracking-wider border-b border-slate-800 pb-1">
+                <span>Mahfuz Now</span>
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 block animate-pulse" />
+              </div>
+              <div className="mt-1.5 space-y-1 text-[7px] font-semibold text-slate-300">
+                <div><span className="text-slate-500 font-bold">🔨 Building:</span> {currentStatus.building}</div>
+                <div><span className="text-slate-500 font-bold">📚 Learning:</span> {currentStatus.learning}</div>
+              </div>
             </div>
-            <div className="mt-1.5 space-y-1 text-[7px] font-semibold text-slate-300">
-              <div><span className="text-slate-500 font-bold">🔨 Building:</span> {currentStatus.building}</div>
-              <div><span className="text-slate-500 font-bold">📚 Learning:</span> {currentStatus.learning}</div>
+            <div className="text-[5px] text-slate-500 font-black tracking-widest text-right mt-1">
+              UPDATED DAILY
             </div>
           </div>
-          <div className="text-[5px] text-slate-500 font-black tracking-widest text-right mt-1">
-            UPDATED DAILY
-          </div>
-        </div>
-      </Html>
+        </Html>
+      )}
     </group>
   );
 };

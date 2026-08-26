@@ -4,8 +4,11 @@ import { useStore } from '../../store/useStore';
 import { Sparkles, Navigation2, X } from 'lucide-react';
 
 export const TikoGuide: React.FC = () => {
-  const { setActiveLocationId } = useStore();
+  const { setActiveLocationId, activeLocationId, activeGameId } = useStore();
   const [talkOpen, setTalkOpen] = useState(false);
+
+  // Auto-close when a modal opens
+  const isModalOpen = !!(activeLocationId || activeGameId);
 
   const handleTikoClick = (e: any) => {
     e.stopPropagation();
@@ -56,19 +59,21 @@ export const TikoGuide: React.FC = () => {
         </mesh>
       </group>
 
-      {/* In-world Click Target Hover indicator */}
-      <Html position={[0, 1.4, 0]} center distanceFactor={8}>
-        <button 
-          onClick={handleTikoClick}
-          className="bg-purple-600 hover:bg-purple-700 text-white font-black text-[7px] uppercase tracking-wider px-2 py-0.5 rounded-full shadow-premium transition border border-purple-400 flex items-center gap-1 cursor-pointer pointer-events-auto"
-        >
-          <Sparkles size={8} />
-          <span>Talk to Tiko</span>
-        </button>
-      </Html>
+      {/* In-world Click Target Hover indicator — hidden when any modal is open */}
+      {!isModalOpen && (
+        <Html position={[0, 1.4, 0]} center distanceFactor={8}>
+          <button 
+            onClick={handleTikoClick}
+            className="bg-purple-600 hover:bg-purple-700 text-white font-black text-[7px] uppercase tracking-wider px-2 py-0.5 rounded-full shadow-premium transition border border-purple-400 flex items-center gap-1 cursor-pointer pointer-events-auto"
+          >
+            <Sparkles size={8} />
+            <span>Talk to Tiko</span>
+          </button>
+        </Html>
+      )}
 
-      {/* Speach bubble UI */}
-      {talkOpen && (
+      {/* Speech bubble — also hidden when modal is open */}
+      {talkOpen && !isModalOpen && (
         <Html position={[0, 1.6, 0]} center distanceFactor={7} className="z-50">
           <div className="bg-slate-900 border border-purple-500/30 text-white p-3 rounded-2xl w-[190px] shadow-premium select-none font-sans relative pointer-events-auto">
             {/* Speach tail */}

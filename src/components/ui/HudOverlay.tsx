@@ -19,8 +19,12 @@ export const HudOverlay: React.FC = () => {
     toggleMenu,
     quests,
     photoModeActive,
-    setPhotoModeActive
+    setPhotoModeActive,
+    activeGameId
   } = useStore();
+
+  // When a game modal is open, hide most HUD chrome so games have a clean UI
+  const isGameActive = !!activeGameId;
 
   // Local HUD panel visibility states
   const [brandOpen, setBrandOpen] = useState(true);
@@ -179,8 +183,8 @@ export const HudOverlay: React.FC = () => {
         </div>
       )}
 
-      {/* 4. BOTTOM-LEFT QUEST CHECKLIST & NAVIGATION */}
-      {questOpen ? (
+      {/* 4. BOTTOM-LEFT QUEST CHECKLIST (hidden when game is active) */}
+      {!isGameActive && questOpen && (
         <div className="absolute bottom-6 left-6 pointer-events-auto bg-white/95 backdrop-blur-sm border border-slate-100 rounded-2xl p-4 shadow-soft max-w-[280px] animate-in fade-in slide-in-from-bottom-3 duration-200">
           <div className="flex items-center justify-between text-brand-blue font-bold text-xs uppercase tracking-wider mb-2.5">
             <div className="flex items-center gap-1.5">
@@ -217,7 +221,8 @@ export const HudOverlay: React.FC = () => {
             })}
           </div>
         </div>
-      ) : (
+      )}
+      {!isGameActive && !questOpen && (
         <button
           onClick={() => setQuestOpen(true)}
           className="absolute bottom-6 left-6 pointer-events-auto bg-white/95 backdrop-blur-sm border border-slate-100 rounded-full p-3 shadow-soft hover:shadow-premium text-brand-blue hover:text-brand-blue-dark transition flex items-center gap-1.5 text-xs font-bold animate-in fade-in slide-in-from-bottom-2 duration-200"
@@ -228,43 +233,47 @@ export const HudOverlay: React.FC = () => {
         </button>
       )}
 
-      {/* 5. BOTTOM-CENTER QUICK ACCESS LOCATION BAR */}
-      <div 
-        className="absolute bottom-6 left-1/2 -translate-x-1/2 flex items-center gap-2 pointer-events-auto bg-white/95 backdrop-blur-sm border border-slate-100 rounded-full py-2 px-3.5 shadow-premium max-w-[calc(100vw-160px)] sm:max-w-max overflow-x-auto scrollbar-none"
-        style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
-      >
-        {locationsData.map((loc) => {
-          const isActive = activeLocationId === loc.id;
-          return (
-            <button
-              key={loc.id}
-              onClick={() => setActiveLocationId(isActive ? null : loc.id)}
-              className={`text-[10px] font-bold px-3 py-1.5 rounded-full transition whitespace-nowrap ${
-                isActive 
-                  ? 'bg-brand-blue text-white shadow-soft' 
-                  : 'text-slate-600 hover:bg-slate-50'
-              }`}
-            >
-              {loc.shortLabel}
-            </button>
-          );
-        })}
-      </div>
-
-      {/* 6. BOTTOM-RIGHT MAP BUTTON */}
-      <div className="absolute bottom-6 right-6 pointer-events-auto">
-        <button
-          onClick={() => toggleMinimap(!minimapOpen)}
-          className={`w-11 h-11 rounded-full flex items-center justify-center border shadow-premium transition ${
-            minimapOpen 
-              ? 'bg-brand-blue border-brand-blue text-white' 
-              : 'bg-white/95 border-slate-100 text-slate-600 hover:bg-slate-50'
-          }`}
-          title="Open city map"
+      {/* 5. BOTTOM-CENTER QUICK ACCESS LOCATION BAR (hidden during games) */}
+      {!isGameActive && (
+        <div 
+          className="absolute bottom-6 left-1/2 -translate-x-1/2 flex items-center gap-2 pointer-events-auto bg-white/95 backdrop-blur-sm border border-slate-100 rounded-full py-2 px-3.5 shadow-premium max-w-[calc(100vw-160px)] sm:max-w-max overflow-x-auto scrollbar-none"
+          style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
         >
-          <Map size={18} />
-        </button>
-      </div>
+          {locationsData.map((loc) => {
+            const isActive = activeLocationId === loc.id;
+            return (
+              <button
+                key={loc.id}
+                onClick={() => setActiveLocationId(isActive ? null : loc.id)}
+                className={`text-[10px] font-bold px-3 py-1.5 rounded-full transition whitespace-nowrap ${
+                  isActive 
+                    ? 'bg-brand-blue text-white shadow-soft' 
+                    : 'text-slate-600 hover:bg-slate-50'
+                }`}
+              >
+                {loc.shortLabel}
+              </button>
+            );
+          })}
+        </div>
+      )}
+
+      {/* 6. BOTTOM-RIGHT MAP BUTTON (hidden during games) */}
+      {!isGameActive && (
+        <div className="absolute bottom-6 right-6 pointer-events-auto">
+          <button
+            onClick={() => toggleMinimap(!minimapOpen)}
+            className={`w-11 h-11 rounded-full flex items-center justify-center border shadow-premium transition ${
+              minimapOpen 
+                ? 'bg-brand-blue border-brand-blue text-white' 
+                : 'bg-white/95 border-slate-100 text-slate-600 hover:bg-slate-50'
+            }`}
+            title="Open city map"
+          >
+            <Map size={18} />
+          </button>
+        </div>
+      )}
 
     </div>
   );
