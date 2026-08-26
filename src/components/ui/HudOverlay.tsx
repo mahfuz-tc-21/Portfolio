@@ -196,7 +196,7 @@ export const HudOverlay: React.FC = () => {
 
       {/* 5. BOTTOM-CENTER QUICK ACCESS LOCATION BAR */}
       <div 
-        className="absolute bottom-6 left-1/2 -translate-x-1/2 flex items-center gap-2 pointer-events-auto bg-white/95 backdrop-blur-sm border border-slate-100 rounded-full py-2 px-3.5 shadow-premium max-w-[calc(100vw-120px)] sm:max-w-max overflow-x-auto scrollbar-none"
+        className="absolute bottom-6 left-1/2 -translate-x-1/2 flex items-center gap-2 pointer-events-auto bg-white/95 backdrop-blur-sm border border-slate-100 rounded-full py-2 px-3.5 shadow-premium max-w-[calc(100vw-160px)] sm:max-w-max overflow-x-auto scrollbar-none"
         style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
       >
         {locationsData.map((loc) => {
