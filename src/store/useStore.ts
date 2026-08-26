@@ -16,6 +16,11 @@ interface AppState {
   playerPos: [number, number, number];
   playerTarget: [number, number, number] | null;
   
+  // Playground & Interactive Update additions
+  activeGameId: string | null;
+  photoModeActive: boolean;
+  gameScores: Record<string, number>;
+  
   // Actions
   setActiveLocationId: (id: string | null) => void;
   setHoveredLocationId: (id: string | null) => void;
@@ -25,6 +30,11 @@ interface AppState {
   toggleMenu: (open?: boolean) => void;
   setPlayerPos: (pos: [number, number, number]) => void;
   setPlayerTarget: (target: [number, number, number] | null) => void;
+  
+  // Playground Actions
+  setActiveGameId: (gameId: string | null) => void;
+  setPhotoModeActive: (active: boolean) => void;
+  saveGameScore: (gameId: string, score: number) => void;
   
   // Quest state
   quests: QuestState;
@@ -38,7 +48,11 @@ const locationIds = [
   'cpi-campus',
   'tech-cluder',
   'github-center',
-  'city-exit'
+  'city-exit',
+  'playground',
+  'museum',
+  'cafe',
+  'terminal'
 ];
 
 export const useStore = create<AppState>((set, get) => ({
@@ -50,6 +64,11 @@ export const useStore = create<AppState>((set, get) => ({
   menuOpen: false,
   playerPos: [0, 0, 4], // start near City Center
   playerTarget: null,
+  
+  // Playground additions initial state
+  activeGameId: null,
+  photoModeActive: false,
+  gameScores: JSON.parse(localStorage.getItem('mahfuz-city-scores') || '{}'),
 
   setActiveLocationId: (id) => {
     set({ activeLocationId: id });
@@ -65,6 +84,23 @@ export const useStore = create<AppState>((set, get) => ({
   toggleMenu: (open) => set((state) => ({ menuOpen: open !== undefined ? open : !state.menuOpen })),
   setPlayerPos: (pos) => set({ playerPos: pos }),
   setPlayerTarget: (target) => set({ playerTarget: target }),
+  
+  // Playground action implementations
+  setActiveGameId: (gameId) => set({ activeGameId: gameId }),
+  setPhotoModeActive: (active) => set({ photoModeActive: active }),
+  saveGameScore: (gameId, score) => {
+    set((state) => {
+      const currentBest = state.gameScores[gameId] || 0;
+      // High score logic (larger is better, except for timer-based game codes if implemented)
+      const newScore = score > currentBest ? score : currentBest;
+      const updatedScores = {
+        ...state.gameScores,
+        [gameId]: newScore
+      };
+      localStorage.setItem('mahfuz-city-scores', JSON.stringify(updatedScores));
+      return { gameScores: updatedScores };
+    });
+  },
 
   quests: {
     visitedLocations: locationIds.reduce((acc, id) => ({ ...acc, [id]: false }), {}),
@@ -85,3 +121,4 @@ export const useStore = create<AppState>((set, get) => ({
     }
   }
 }));
+export default useStore;

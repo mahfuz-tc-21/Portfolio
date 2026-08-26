@@ -10,6 +10,7 @@ import { InteractiveBuilding } from './components/world/InteractiveBuilding';
 import { CameraFocusController } from './components/world/CameraFocusController';
 import { PlayerCharacter } from './components/player/PlayerCharacter';
 import { InteractiveDetails } from './components/world/InteractiveDetails';
+import { TikoGuide } from './components/player/TikoGuide';
 import {
   CityCenterBuilding,
   AiLabBuilding,
@@ -18,7 +19,12 @@ import {
   CpiCampusBuilding,
   TechCluderBuilding,
   GithubCenterBuilding,
-  CityExitBuilding
+  CityExitBuilding,
+  ArcadeBuilding,
+  MuseumBuilding,
+  CafeBuilding,
+  TerminalKiosk,
+  BillboardModel
 } from './components/world/Buildings';
 
 // UI HUD Components
@@ -27,6 +33,19 @@ import { InfoPanel } from './components/panels/InfoPanel';
 import { Minimap } from './components/minimap/Minimap';
 import { FallbackPortfolio } from './components/ui/FallbackPortfolio';
 import { Loader, Play, Sparkles } from 'lucide-react';
+
+// Games & Playground Components
+import { PlaygroundGamesHub } from './components/games/PlaygroundGamesHub';
+import { DebugCity } from './components/games/DebugCity';
+import { AILabChallenge } from './components/games/AILabChallenge';
+import { CityMemory } from './components/games/CityMemory';
+import { CityMaze } from './components/games/CityMaze';
+import { CodeRunner } from './components/games/CodeRunner';
+
+// New District Panels
+import { MuseumViewer } from './components/panels/MuseumViewer';
+import { TerminalConsole } from './components/panels/TerminalConsole';
+import { CafeKiosk } from './components/panels/CafeKiosk';
 
 export const App: React.FC = () => {
   const [hasWebGL, setHasWebGL] = useState<boolean>(true);
@@ -262,6 +281,56 @@ export const App: React.FC = () => {
               <CityExitBuilding />
             </InteractiveBuilding>
 
+            {/* 9. Playground (Arcade Hub) */}
+            <InteractiveBuilding
+              id="playground"
+              name="PLAYGROUND"
+              subtitle="Play. Experiment. Have Fun."
+              position={[12, 0.05, 10]}
+              labelOffset={3.0}
+            >
+              <ArcadeBuilding />
+            </InteractiveBuilding>
+
+            {/* 10. Developer Museum */}
+            <InteractiveBuilding
+              id="museum"
+              name="DEVELOPER MUSEUM"
+              subtitle="Interactive Archive of my Journey"
+              position={[-12, 0.05, -10]}
+              labelOffset={2.8}
+            >
+              <MuseumBuilding />
+            </InteractiveBuilding>
+
+            {/* 11. Developer Café */}
+            <InteractiveBuilding
+              id="cafe"
+              name="DEVELOPER CAFÉ"
+              subtitle="Coffee & Code Atmosphere"
+              position={[8, 0.05, 12]}
+              labelOffset={2.6}
+            >
+              <CafeBuilding />
+            </InteractiveBuilding>
+
+            {/* 12. Terminal Kiosk */}
+            <InteractiveBuilding
+              id="terminal"
+              name="LIVE TERMINAL KIOSK"
+              subtitle="Type commands to inspect"
+              position={[-6, 0.05, 12]}
+              labelOffset={2.4}
+            >
+              <TerminalKiosk />
+            </InteractiveBuilding>
+
+            {/* 13. Dynamic Roundtable Billboard */}
+            <BillboardModel />
+
+            {/* Guide NPC Tiko */}
+            <TikoGuide />
+
             {/* Orbit controls active at all times */}
             <OrbitControls
               makeDefault
@@ -281,6 +350,19 @@ export const App: React.FC = () => {
           <HudOverlay />
           <InfoPanel />
           <Minimap />
+
+          {/* Playground Games Hub Selection & Modals */}
+          <PlaygroundGamesHub />
+          <DebugCity />
+          <AILabChallenge />
+          <CityMemory />
+          <CityMaze />
+          <CodeRunner />
+
+          {/* Interactive Panels */}
+          <MuseumViewer />
+          <TerminalConsole />
+          <CafeKiosk />
         </>
       )}
 

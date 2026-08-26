@@ -113,8 +113,67 @@ export const locationsData: Location[] = [
     color: '#EC4899',
     coordinates: [0, 0, 14],
     interactive: true
+  },
+  {
+    id: 'playground',
+    name: 'PLAYGROUND',
+    subtitle: 'Play. Experiment. Have Fun.',
+    district: 'Playground District',
+    description: 'A dedicated interactive playground inside Mahfuz\'s digital city. Stop exploring and play developer-themed mini-games like Debug the City, AI Lab Challenge, memory patterns, or maze runner!',
+    icon: 'Trophy',
+    color: '#3B82F6',
+    coordinates: [12, 0, 10],
+    interactive: true
+  },
+  {
+    id: 'museum',
+    name: 'DEVELOPER MUSEUM',
+    subtitle: 'Interactive Archive of my Journey',
+    district: 'Academy District',
+    description: 'Explore the archive of Mahfuz\'s engineering journey. Walk through room exhibitions detailing Programming, Web Development, Artificial Intelligence, and active experiments.',
+    icon: 'Compass',
+    color: '#8B5CF6',
+    coordinates: [-12, 0, -10],
+    interactive: true
+  },
+  {
+    id: 'cafe',
+    name: 'DEVELOPER CAFÉ',
+    subtitle: 'Coffee & Code Atmosphere',
+    district: 'East Plaza',
+    description: 'Welcome to the Developer Café! Pull up a chair, check out what Mahfuz is currently learning or building, grab a virtual coffee, and enjoy a curated background audio ambient music stream.',
+    icon: 'Coffee',
+    color: '#10B981',
+    coordinates: [8, 0, 12],
+    interactive: true
+  },
+  {
+    id: 'terminal',
+    name: 'LIVE TERMINAL KIOSK',
+    subtitle: 'Type commands to inspect',
+    district: 'Harbor Edge',
+    description: 'An interactive command terminal interface. Type custom shell command logs (help, projects, ai, skills, github) to retrieve portfolio details inside a retro command shell.',
+    icon: 'Terminal',
+    color: '#0F172A',
+    coordinates: [-6, 0, 12],
+    interactive: true
   }
 ];
+
+export interface BillboardStatus {
+  building: string;
+  learning: string;
+  latestProject: string;
+  latestExperiment: string;
+}
+
+export const currentStatus: BillboardStatus = {
+  building: "Playground & Live Terminal Expansion",
+  learning: "Three.js Shaders & React 19 Fiber Damping",
+  latestProject: "TrendPilot AI Platform",
+  latestExperiment: "Web Audio Generative Synthesizers"
+};
+
 
 export const projectsData: Project[] = [
   {

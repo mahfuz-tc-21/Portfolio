@@ -1,6 +1,8 @@
-import React, { useRef } from 'react';
+import React, { useRef, useState } from 'react';
 import * as THREE from 'three';
 import { useFrame } from '@react-three/fiber';
+import { Html } from '@react-three/drei';
+import confetti from 'canvas-confetti';
 
 interface NpcProps {
   position: [number, number, number];
@@ -46,6 +48,25 @@ const LowPolyNpc: React.FC<NpcProps> = ({ position, color, radius = 2.0, speed =
 };
 
 export const InteractiveDetails: React.FC = () => {
+  const [pixelBubble, setPixelBubble] = useState(false);
+  const [starBubble, setStarBubble] = useState(false);
+
+  const handlePixelClick = (e: any) => {
+    e.stopPropagation();
+    setPixelBubble(!pixelBubble);
+    if (!pixelBubble) {
+      confetti({ particleCount: 30, spread: 30, origin: { y: 0.6 } });
+    }
+  };
+
+  const handleStarClick = (e: any) => {
+    e.stopPropagation();
+    setStarBubble(!starBubble);
+    if (!starBubble) {
+      confetti({ particleCount: 40, spread: 35, origin: { y: 0.6 } });
+    }
+  };
+
   return (
     <group>
       {/* NPCs Walking at CPI Campus courtyard */}
@@ -107,6 +128,58 @@ export const InteractiveDetails: React.FC = () => {
           </mesh>
         </group>
       ))}
+
+      {/* Easter Egg 1: Pixel the Coding Cat */}
+      <group position={[6, 1.8, 8]}>
+        {/* Cat Body */}
+        <mesh 
+          castShadow 
+          onClick={handlePixelClick}
+        >
+          <boxGeometry args={[0.2, 0.15, 0.35]} />
+          <meshStandardMaterial color="#1E293B" roughness={0.9} />
+        </mesh>
+        {/* Cat Head */}
+        <mesh position={[0, 0.1, 0.12]}>
+          <boxGeometry args={[0.15, 0.15, 0.15]} />
+          <meshStandardMaterial color="#1E293B" />
+        </mesh>
+
+        {pixelBubble && (
+          <Html position={[0, 0.4, 0]} center distanceFactor={8}>
+            <div className="bg-slate-900 border border-emerald-500/30 text-white p-2.5 rounded-xl w-[150px] shadow-premium select-none font-sans text-center relative pointer-events-auto">
+              <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-2 h-2 bg-slate-900 border-r border-b border-emerald-500/30 rotate-45" />
+              <div className="text-[7px] font-black uppercase text-emerald-400 mb-0.5">🐱 Easter Egg Found!</div>
+              <p className="text-[8px] text-slate-300 leading-normal font-bold">
+                Meow! You found Pixel, Mahfuz's coding cat. "Keep pushing commits!"
+              </p>
+            </div>
+          </Html>
+        )}
+      </group>
+
+      {/* Easter Egg 2: Secret Rooftop Star */}
+      <group position={[0, 4.3, 0]}>
+        <mesh 
+          onClick={handleStarClick}
+        >
+          <octahedronGeometry args={[0.15]} />
+          <meshStandardMaterial color="#F59E0B" emissive="#F59E0B" emissiveIntensity={0.6} />
+        </mesh>
+
+        {starBubble && (
+          <Html position={[0, 0.4, 0]} center distanceFactor={8}>
+            <div className="bg-slate-900 border border-amber-500/30 text-white p-2.5 rounded-xl w-[150px] shadow-premium select-none font-sans text-center relative pointer-events-auto">
+              <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-2 h-2 bg-slate-900 border-r border-b border-amber-500/30 rotate-45" />
+              <div className="text-[7px] font-black uppercase text-amber-400 mb-0.5">🌟 Rooftop Discovered!</div>
+              <p className="text-[8px] text-slate-300 leading-normal font-bold">
+                You found the secret panoramic deck of Mahfuz HQ! Enjoy the view.
+              </p>
+            </div>
+          </Html>
+        )}
+      </group>
+
     </group>
   );
 };

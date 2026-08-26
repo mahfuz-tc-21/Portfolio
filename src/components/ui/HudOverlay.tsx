@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useStore } from '../../store/useStore';
 import { locationsData } from '../../data/portfolioData';
 import { audioSynth } from '../../lib/audioSynth';
-import { Volume2, VolumeX, Menu, Map, CheckSquare, Square, X } from 'lucide-react';
+import { Volume2, VolumeX, Menu, Map, CheckSquare, Square, X, Camera } from 'lucide-react';
 import confetti from 'canvas-confetti';
 
 export const HudOverlay: React.FC = () => {
@@ -17,7 +17,9 @@ export const HudOverlay: React.FC = () => {
     toggleMinimap,
     menuOpen,
     toggleMenu,
-    quests
+    quests,
+    photoModeActive,
+    setPhotoModeActive
   } = useStore();
 
   // Local HUD panel visibility states
@@ -53,6 +55,29 @@ export const HudOverlay: React.FC = () => {
       });
     }
   }, [quests.visitedLocations]);
+
+  if (photoModeActive) {
+    return (
+      <div className="absolute inset-0 pointer-events-none z-40 flex flex-col justify-between p-6 select-none">
+        {/* Photo Mode corner guides */}
+        <div className="absolute top-6 left-6 w-8 h-8 border-t-2 border-l-2 border-white/50" />
+        <div className="absolute top-6 right-6 w-8 h-8 border-t-2 border-r-2 border-white/50" />
+        <div className="absolute bottom-6 left-6 w-8 h-8 border-b-2 border-l-2 border-white/50" />
+        <div className="absolute bottom-6 right-6 w-8 h-8 border-b-2 border-r-2 border-white/50" />
+
+        <div className="mx-auto bg-slate-900/80 backdrop-blur-xs border border-slate-700/30 text-white rounded-full py-1.5 px-4 shadow-premium flex items-center gap-2 pointer-events-auto text-[9px] font-black tracking-widest uppercase">
+          📸 Photo Mode
+        </div>
+
+        <button
+          onClick={() => setPhotoModeActive(false)}
+          className="mx-auto mb-4 bg-brand-blue hover:bg-brand-blue-dark text-white text-[10px] font-bold py-2 px-6 rounded-xl shadow-premium pointer-events-auto transition cursor-pointer"
+        >
+          Exit Photo Mode
+        </button>
+      </div>
+    );
+  }
 
   return (
     <div className="absolute inset-0 pointer-events-none z-30 select-none">
@@ -108,6 +133,15 @@ export const HudOverlay: React.FC = () => {
           title="Toggle ambient audio"
         >
           {soundOn ? <Volume2 size={16} /> : <VolumeX size={16} />}
+        </button>
+
+        {/* Photo Mode Button */}
+        <button
+          onClick={() => setPhotoModeActive(true)}
+          className="w-9 h-9 rounded-full flex items-center justify-center border shadow-soft transition bg-white/95 border-slate-100 text-slate-500 hover:bg-slate-50 cursor-pointer"
+          title="Trigger Photo Mode"
+        >
+          <Camera size={16} />
         </button>
 
         {/* Menu Toggle */}
