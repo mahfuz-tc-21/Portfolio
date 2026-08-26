@@ -1,8 +1,8 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useStore } from '../../store/useStore';
 import { locationsData } from '../../data/portfolioData';
 import { audioSynth } from '../../lib/audioSynth';
-import { Volume2, VolumeX, Menu, Map, CheckSquare, Square } from 'lucide-react';
+import { Volume2, VolumeX, Menu, Map, CheckSquare, Square, X } from 'lucide-react';
 import confetti from 'canvas-confetti';
 
 export const HudOverlay: React.FC = () => {
@@ -19,6 +19,10 @@ export const HudOverlay: React.FC = () => {
     toggleMenu,
     quests
   } = useStore();
+
+  // Local HUD panel visibility states
+  const [brandOpen, setBrandOpen] = useState(true);
+  const [questOpen, setQuestOpen] = useState(true);
 
   // Dynamic time ticks
   useEffect(() => {
@@ -53,15 +57,35 @@ export const HudOverlay: React.FC = () => {
   return (
     <div className="absolute inset-0 pointer-events-none z-30 select-none">
       
-      {/* 1. TOP-LEFT LOGO CARD */}
-      <div className="absolute top-6 left-6 pointer-events-auto bg-white/95 backdrop-blur-sm border border-slate-100 rounded-2xl p-4 shadow-soft">
-        <h1 className="text-base font-bold text-brand-blue tracking-wider font-display leading-tight">
-          MAHFUZ'S CITY
-        </h1>
-        <p className="text-[9px] text-slate-400 font-bold uppercase tracking-widest mt-0.5">
-          3D Portfolio World
-        </p>
-      </div>
+      {/* 1. TOP-LEFT BRAND CARD */}
+      {brandOpen ? (
+        <div className="absolute top-6 left-6 pointer-events-auto bg-white/95 backdrop-blur-sm border border-slate-100 rounded-2xl py-2 px-3.5 shadow-soft flex items-center gap-3 animate-in fade-in slide-in-from-left-3 duration-200">
+          <div>
+            <h1 className="text-xs font-black tracking-widest text-slate-800 uppercase flex items-center gap-1.5 font-display leading-tight">
+              <span className="w-2 h-2 rounded-full bg-brand-blue block animate-soft-pulse" />
+              <span>Mahfuz Uddin</span>
+            </h1>
+            <p className="text-[9px] text-slate-400 font-bold uppercase tracking-widest mt-0.5">
+              3D Portfolio World
+            </p>
+          </div>
+          <button
+            onClick={() => setBrandOpen(false)}
+            className="p-1 hover:bg-slate-100 rounded text-slate-400 hover:text-slate-600 transition"
+            title="Collapse logo"
+          >
+            <X size={12} />
+          </button>
+        </div>
+      ) : (
+        <button
+          onClick={() => setBrandOpen(true)}
+          className="absolute top-6 left-6 pointer-events-auto w-9 h-9 bg-white/95 backdrop-blur-sm border border-slate-100 rounded-full flex items-center justify-center shadow-soft hover:shadow-premium transition text-brand-blue hover:text-brand-blue-dark font-bold text-xs"
+          title="Show brand info"
+        >
+          M
+        </button>
+      )}
 
       {/* 2. TOP-RIGHT HUD CAPSULE & CONTROLS */}
       <div className="absolute top-6 right-6 flex items-center gap-3 pointer-events-auto">
@@ -122,36 +146,59 @@ export const HudOverlay: React.FC = () => {
       )}
 
       {/* 4. BOTTOM-LEFT QUEST CHECKLIST & NAVIGATION */}
-      <div className="absolute bottom-6 left-6 pointer-events-auto bg-white/95 backdrop-blur-sm border border-slate-100 rounded-2xl p-4 shadow-soft max-w-[280px]">
-        <div className="flex items-center gap-1.5 text-brand-blue font-bold text-xs uppercase tracking-wider mb-2.5">
-          <CheckSquare size={13} />
-          <span>City Exploration Quest</span>
+      {questOpen ? (
+        <div className="absolute bottom-6 left-6 pointer-events-auto bg-white/95 backdrop-blur-sm border border-slate-100 rounded-2xl p-4 shadow-soft max-w-[280px] animate-in fade-in slide-in-from-bottom-3 duration-200">
+          <div className="flex items-center justify-between text-brand-blue font-bold text-xs uppercase tracking-wider mb-2.5">
+            <div className="flex items-center gap-1.5">
+              <CheckSquare size={13} />
+              <span>Exploration Quest</span>
+            </div>
+            <button
+              onClick={() => setQuestOpen(false)}
+              className="p-1 hover:bg-slate-100 rounded text-slate-400 hover:text-slate-600 transition"
+              title="Hide quests"
+            >
+              <X size={12} />
+            </button>
+          </div>
+          <div className="space-y-1.5 max-h-[120px] overflow-y-auto pr-1">
+            {locationsData.map((loc) => {
+              const visited = quests.visitedLocations[loc.id];
+              return (
+                <button
+                  key={loc.id}
+                  onClick={() => setActiveLocationId(loc.id)}
+                  className="flex items-center gap-2 text-left w-full text-[10px] font-medium text-slate-600 hover:text-brand-blue transition"
+                >
+                  {visited ? (
+                    <CheckSquare size={12} className="text-green-500 flex-shrink-0" />
+                  ) : (
+                    <Square size={12} className="text-slate-300 flex-shrink-0" />
+                  )}
+                  <span className={visited ? 'line-through text-slate-400 font-medium' : 'font-bold'}>
+                    Visit {loc.district}
+                  </span>
+                </button>
+              );
+            })}
+          </div>
         </div>
-        <div className="space-y-1.5 max-h-[140px] overflow-y-auto pr-1">
-          {locationsData.map((loc) => {
-            const visited = quests.visitedLocations[loc.id];
-            return (
-              <button
-                key={loc.id}
-                onClick={() => setActiveLocationId(loc.id)}
-                className="flex items-center gap-2 text-left w-full text-[10px] font-medium text-slate-600 hover:text-brand-blue transition"
-              >
-                {visited ? (
-                  <CheckSquare size={12} className="text-green-500 flex-shrink-0" />
-                ) : (
-                  <Square size={12} className="text-slate-300 flex-shrink-0" />
-                )}
-                <span className={visited ? 'line-through text-slate-400 font-medium' : 'font-bold'}>
-                  Visit {loc.district}
-                </span>
-              </button>
-            );
-          })}
-        </div>
-      </div>
+      ) : (
+        <button
+          onClick={() => setQuestOpen(true)}
+          className="absolute bottom-6 left-6 pointer-events-auto bg-white/95 backdrop-blur-sm border border-slate-100 rounded-full p-3 shadow-soft hover:shadow-premium text-brand-blue hover:text-brand-blue-dark transition flex items-center gap-1.5 text-xs font-bold animate-in fade-in slide-in-from-bottom-2 duration-200"
+          title="Show quests"
+        >
+          <CheckSquare size={16} />
+          <span className="sm:inline hidden">Quests</span>
+        </button>
+      )}
 
       {/* 5. BOTTOM-CENTER QUICK ACCESS LOCATION BAR */}
-      <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex items-center gap-2 pointer-events-auto bg-white/95 backdrop-blur-sm border border-slate-100 rounded-full py-2 px-3.5 shadow-premium">
+      <div 
+        className="absolute bottom-6 left-1/2 -translate-x-1/2 flex items-center gap-2 pointer-events-auto bg-white/95 backdrop-blur-sm border border-slate-100 rounded-full py-2 px-3.5 shadow-premium max-w-[calc(100vw-120px)] sm:max-w-max overflow-x-auto scrollbar-none"
+        style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+      >
         {locationsData.map((loc) => {
           const isActive = activeLocationId === loc.id;
           return (
