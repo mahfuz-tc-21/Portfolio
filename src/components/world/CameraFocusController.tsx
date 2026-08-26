@@ -72,9 +72,9 @@ export const CameraFocusController: React.FC = () => {
           }
         }
       } else {
-        // Return to wide overview - zoom out further on mobile screen sizes
+        // Return to wide overview - zoom out further on mobile screen sizes (distance ~54)
         targetPos.current.set(0, 0, 0);
-        cameraPos.current.set(0, isMobile ? 26 : 15, isMobile ? 33 : 20);
+        cameraPos.current.set(0, isMobile ? 34 : 15, isMobile ? 42 : 20);
       }
     }
   }, [activeLocationId]);
@@ -90,7 +90,7 @@ export const CameraFocusController: React.FC = () => {
       
       if (elapsed < 2.5) {
         // Adjust intro end altitude for mobile so it fits the viewport from start
-        const targetIntroPos = new THREE.Vector3(0, isMobile ? 22 : 12, isMobile ? 28 : 18);
+        const targetIntroPos = new THREE.Vector3(0, isMobile ? 30 : 12, isMobile ? 38 : 18);
         camera.position.lerp(targetIntroPos, 0.05 * delta * 60);
         camera.lookAt(0, 1, 0);
         if (controls) {

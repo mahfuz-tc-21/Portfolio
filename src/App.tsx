@@ -269,7 +269,7 @@ export const App: React.FC = () => {
               dampingFactor={0.05}
               maxPolarAngle={Math.PI / 2.3} // limit tilting underground
               minDistance={3}
-              maxDistance={35}
+              maxDistance={60}
             />
           </Canvas>
         </Suspense>
