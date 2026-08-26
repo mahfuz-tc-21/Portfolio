@@ -90,7 +90,7 @@ export const HudOverlay: React.FC = () => {
       {/* 2. TOP-RIGHT HUD CAPSULE & CONTROLS */}
       <div className="absolute top-6 right-6 flex items-center gap-3 pointer-events-auto">
         {/* Day / Time Capsule */}
-        <div className="bg-white/95 backdrop-blur-sm border border-slate-100 rounded-full py-1.5 px-4 shadow-soft flex items-center gap-2 text-xs font-bold text-slate-700">
+        <div className="bg-white/95 backdrop-blur-sm border border-slate-100 rounded-full py-1.5 px-4 shadow-soft sm:flex hidden items-center gap-2 text-xs font-bold text-slate-700">
           <span className="text-yellow-500 font-black">☀</span>
           <span>Day</span>
           <span className="text-slate-300">|</span>

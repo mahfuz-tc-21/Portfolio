@@ -99,7 +99,7 @@ export const Environment: React.FC = () => {
       <color attach="background" args={['#F1F5F9']} />
       
       {/* Soft Daytime Fog */}
-      <fog attach="fog" args={['#F1F5F9', 20, 55]} />
+      <fog attach="fog" args={['#F1F5F9', 30, 95]} />
 
       {/* Lights Setup */}
       <ambientLight intensity={0.9} color="#FFFFFF" />
